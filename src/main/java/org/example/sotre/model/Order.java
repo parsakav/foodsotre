@@ -17,9 +17,19 @@ public class Order {
 
     private Date orderDate;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "order_orderstatus")
-    private List<OrderStatus> status;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn
+    private OrderStatus status;
+
+    @OneToOne(fetch = FetchType.EAGER,optional = false)
+    @JoinColumn(name = "cartid",referencedColumnName = "cartid")
+
+    private Cart cart;
+
+    public Order(){
+        status=new OrderStatus();
+        status.setStatus(Status.OPEN);
+    }
 
     public Integer getOrderID() {
         return orderID;
@@ -45,11 +55,19 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public List<OrderStatus> getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(List<OrderStatus> status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

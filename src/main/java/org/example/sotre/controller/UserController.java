@@ -1,5 +1,6 @@
 package org.example.sotre.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import org.example.sotre.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -20,7 +21,9 @@ public class UserController {
     @PutMapping("/resetPassword")
     @PreAuthorize("hasRole('USER')")
 
-    public ResponseEntity resetPassword(@RequestParam String email, @RequestParam String password) {
+    public ResponseEntity<Boolean> resetPassword(@NotBlank @RequestParam String email,
+
+                                        @NotBlank @RequestParam String password) {
 
 
         userRepository.resetPassword(email, bCryptPasswordEncoder.encode(password));

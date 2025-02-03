@@ -21,6 +21,8 @@ public class Product {
     @JoinTable(name = "product_category")
     private List<Category> category;
 
+    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "products")
+    private List<Cart> carts;
 
 
     public Integer getProductID() {
@@ -69,5 +71,13 @@ public class Product {
 
     public void setCategory(List<Category> category) {
         this.category = category;
+    }
+
+    public List<Cart> getCarts() {
+        return carts;
+    }
+
+    public void setCarts(List<Cart> carts) {
+        this.carts = carts;
     }
 }

@@ -11,9 +11,12 @@ public class OrderStatus {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer statusID;
 
-    private String status; // Open/Shipped/Canceled
+    @Column(unique = true, nullable = false,name = "status_name")
+    @Enumerated(EnumType.STRING)
 
-    @ManyToMany(mappedBy = "status",fetch = FetchType.EAGER)
+    private Status status;
+
+    @OneToMany(mappedBy = "status",fetch = FetchType.EAGER)
 private List<Order> orderList;
 
     public Integer getStatusID() {
@@ -24,11 +27,11 @@ private List<Order> orderList;
         this.statusID = statusID;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

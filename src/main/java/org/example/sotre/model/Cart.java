@@ -2,7 +2,11 @@ package org.example.sotre.model;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
+
+@Table(name = "cart")
 public class Cart {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -14,7 +18,12 @@ public class Cart {
 
     private Double totalPrice;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "cart_products")
+    private List<Product> products;
 
+    @OneToOne(fetch = FetchType.EAGER,mappedBy = "cart")
+    private Order order;
 
     public Integer getCartID() {
         return cartID;
@@ -38,5 +47,21 @@ public class Cart {
 
     public void setTotalPrice(Double totalPrice) {
         this.totalPrice = totalPrice;
+    }
+
+    public List<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<Product> products) {
+        this.products = products;
+    }
+
+    public Order getOrder() {
+        return order;
+    }
+
+    public void setOrder(Order order) {
+        this.order = order;
     }
 }
