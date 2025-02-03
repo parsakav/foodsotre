@@ -17,7 +17,7 @@ public class Product {
 
     @ManyToMany(cascade = {
     CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH
-    })
+    },fetch = FetchType.EAGER)
     @JoinTable(name = "product_category")
     private List<Category> category;
 

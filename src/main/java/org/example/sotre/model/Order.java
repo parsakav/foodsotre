@@ -2,8 +2,10 @@ package org.example.sotre.model;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
+@Table(name="orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,11 +17,9 @@ public class Order {
 
     private Date orderDate;
 
-    @ManyToOne
-    @JoinColumn(name = "statusID")
-    private OrderStatus status;
-
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "order_orderstatus")
+    private List<OrderStatus> status;
 
     public Integer getOrderID() {
         return orderID;
@@ -45,11 +45,11 @@ public class Order {
         this.orderDate = orderDate;
     }
 
-    public OrderStatus getStatus() {
+    public List<OrderStatus> getStatus() {
         return status;
     }
 
-    public void setStatus(OrderStatus status) {
+    public void setStatus(List<OrderStatus> status) {
         this.status = status;
     }
 }

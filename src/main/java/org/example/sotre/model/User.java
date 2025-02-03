@@ -1,15 +1,22 @@
 package org.example.sotre.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import org.example.sotre.config.SpringApplicationContext;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import java.util.List;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer userID;
 
     private String name;
+    @Column(unique=true)
     private String email;
     private String password;
     private String phoneNumber;
@@ -18,10 +25,10 @@ public class User {
     private String postCode;
     private String role; // Kunde/Admin
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<Cart> carts;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<Order> orders;
 
 
@@ -112,5 +119,20 @@ public class User {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void encodePassword() {
+        System.out.println(password);
+        if (password != null) {
+            BCryptPasswordEncoder passwordEncoder = (BCryptPasswordEncoder) SpringApplicationContext.getBean("passwordEncoder");
+
+            this.password = passwordEncoder.encode(this.password);
+        }     if (role != null) {
+
+role="ROLE_"+role;
+
+        }
     }
 }

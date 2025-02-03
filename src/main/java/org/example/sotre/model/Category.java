@@ -10,10 +10,12 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryID;
 
+    @Column(unique = true,nullable = false)
     private String name;
+    @Column(nullable = true)
     private String description;
 
-    @ManyToMany(mappedBy = "category")
+    @ManyToMany(mappedBy = "category",fetch = FetchType.EAGER)
     private List<Product> products;
 
 
