@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import java.util.List;
 
 @Entity
-
 @Table(name = "cart")
 public class Cart {
     @Id
@@ -16,14 +15,30 @@ public class Cart {
     @JoinColumn(name = "userID")
     private User user;
 
-    private Double totalPrice;
+    private double totalPrice;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "cart_products")
-    private List<Product> products;
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<CartProduct> cartProducts;
 
-    @OneToOne(fetch = FetchType.EAGER,mappedBy = "cart")
+    @OneToOne(fetch = FetchType.EAGER, mappedBy = "cart")
     private Order order;
+
+    public void addProduct(Product product, int quantity) {
+        for (CartProduct cp : cartProducts) {
+            if (cp.getProduct().getProductID().equals(product.getProductID())) {
+                cp.setQuantity(cp.getQuantity() + quantity);
+                return;
+            }
+        }
+        CartProduct newCartProduct = new CartProduct();
+        newCartProduct.setCart(this);
+        newCartProduct.setProduct(product);
+        newCartProduct.setQuantity(quantity);
+        cartProducts.add(newCartProduct);
+    }
+
+    // Getters and Setters
+
 
     public Integer getCartID() {
         return cartID;
@@ -41,20 +56,20 @@ public class Cart {
         this.user = user;
     }
 
-    public Double getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(Double totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<CartProduct> getCartProducts() {
+        return cartProducts;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setCartProducts(List<CartProduct> cartProducts) {
+        this.cartProducts = cartProducts;
     }
 
     public Order getOrder() {

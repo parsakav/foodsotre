@@ -1,9 +1,10 @@
 package org.example.sotre.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 
 import java.util.List;
-
 @Entity
 public class Product {
     @Id
@@ -15,14 +16,13 @@ public class Product {
     private Double price;
     private Integer stock;
 
-    @ManyToMany(cascade = {
-    CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.DETACH
-    },fetch = FetchType.EAGER)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "product_category")
     private List<Category> category;
 
-    @ManyToMany(fetch = FetchType.EAGER,mappedBy = "products")
-    private List<Cart> carts;
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER)
+    private List<CartProduct> cartProducts;
+
 
 
     public Integer getProductID() {
@@ -73,11 +73,11 @@ public class Product {
         this.category = category;
     }
 
-    public List<Cart> getCarts() {
-        return carts;
+    public List<CartProduct> getCartProducts() {
+        return cartProducts;
     }
 
-    public void setCarts(List<Cart> carts) {
-        this.carts = carts;
+    public void setCartProducts(List<CartProduct> cartProducts) {
+        this.cartProducts = cartProducts;
     }
 }

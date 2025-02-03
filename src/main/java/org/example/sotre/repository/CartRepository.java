@@ -17,13 +17,12 @@ public interface CartRepository extends JpaRepository<Cart, Integer> {
 
 
     @Query("""
-from Cart c join fetch User  u 
-where u.email =:email and c.order is null
+from Cart c join fetch c.user u join fetch c.cartProducts where u.email =:email and c.order is null
  """)
     Cart getLatestCart(@Param("email") String email);
 
     @Query("""
-from Cart c join fetch User  u join fetch Order o
+from Cart c join fetch c.user  u join fetch Order o
  where c.user.email =:userId
 """)
     List<Cart> findCartByUserId(
@@ -31,19 +30,18 @@ from Cart c join fetch User  u join fetch Order o
 
 
     @Query(value = """
-delete from cart_products c where c.cartid in(
+delete from cart_products c where c.cart_id in(
     
-    select cartid from cart as ca 
-                  inner join orders as o on ca.cartid=o.orderid
-                  inner join order_status as st on st.statusid=o.status_statusid
+
+    select ca.cartid from cart as ca
+                 left  join orders as o on ca.cartid=o.cartid
+   					where o.orderid is null
+       
+                  and ca.userid in (
                   
-  
-                  where ca.userid =(
-                  
-                  select userid from user where email =: userId
+                  select userid from user where email =:userId
                   )
-                    and st.statusname='OPEN'
-)
+) and c.product_id=:productId
 """,nativeQuery = true)
     @Modifying
     int deleteProduct(String userId, int productId);
