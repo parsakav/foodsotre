@@ -4,6 +4,7 @@ package org.example.sotre.service;
 import org.example.sotre.dto.UserDto;
 import org.example.sotre.model.Log;
 import org.example.sotre.repository.LogRepository;
+import org.example.sotre.repository.LoggingRepository;
 import org.example.sotre.repository.UserRepository;
 import org.example.sotre.service.exceptions.UnverifiedUserException;
 import org.springframework.beans.BeanUtils;
@@ -25,7 +26,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
-    private LogRepository logRepository;
+    private LoggingRepository logRepository;
     @Autowired
     private UserRepository userRepository;
     @Override
@@ -45,14 +46,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
             throw new UsernameNotFoundException("Username or password is invalid");
         }
-        if(!u.isVerified() && !u.getRole().equalsIgnoreCase("ROLE_ADMIN")){
+        if(!u.isVerified() && !u.getEmail().equalsIgnoreCase("admin")){
             Log log = new Log();
             log.setAction("Un verified login attempt");
             log.setEmail(u.getEmail());
             logRepository.save(log);
             throw new UnverifiedUserException("User isn't verified");
         }
-
         Log log = new Log();
         log.setAction("Login Successful");
         log.setEmail(u.getEmail());
