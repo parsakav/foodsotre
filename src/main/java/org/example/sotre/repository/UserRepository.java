@@ -20,9 +20,16 @@ public interface UserRepository extends JpaRepository<User,Integer> {
 
   @PreAuthorize("hasRole('ADMIN')")
   @Transactional
-  @Query(value = "update user u where u.email=:email set u.verified=true ", nativeQuery = true)
+  @Query(value = "update User u set u.verified=true where u.email=:email")
   @Modifying
-  User verifyUser(String email);
+  int verifyUser(String email);
+
+  @PreAuthorize("hasRole('ADMIN')")
+  @Transactional
+
+  @Query(value = "update User u set u.verified=false where u.email=:email")
+  @Modifying  int disableUser(String email);
+
 
     User findUserByEmail(String email);
 

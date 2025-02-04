@@ -47,7 +47,7 @@ public class CartResponse {
         response.setTotalPrice(cart.getTotalPrice());
         response.setProductResponseList(ProductResponse.from(cart.getCartProducts()));
 
-        response.setUserResponse(new UserResponse(cart.getUser().getUserID(),cart.getUser().getEmail()));
+        response.setUserResponse(new UserResponse(cart.getUser().getUserID(),cart.getUser().getEmail(),cart.getUser().isVerified()));
   return response;
     }    public static List<CartResponse> from(List<Cart> cart) {
 

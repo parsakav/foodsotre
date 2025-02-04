@@ -3,6 +3,7 @@ package org.example.sotre.service;
 
 import org.example.sotre.dto.UserDto;
 import org.example.sotre.repository.UserRepository;
+import org.example.sotre.service.exceptions.UnverifiedUserException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         if( u==null){
             throw new UsernameNotFoundException("Username or password is invalid");
+        }
+        if(!u.isVerified() && !u.getRole().equalsIgnoreCase("ROLE_ADMIN")){
+            throw new UnverifiedUserException("User isn't verified");
         }
 
         return new User(u.getEmail(),
