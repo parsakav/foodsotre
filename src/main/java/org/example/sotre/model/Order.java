@@ -1,6 +1,8 @@
 package org.example.sotre.model;
 
 import jakarta.persistence.*;
+import org.example.sotre.response.OrderResponse;
+
 import java.util.Date;
 import java.util.List;
 
@@ -70,4 +72,13 @@ public class Order {
     public void setCart(Cart cart) {
         this.cart = cart;
     }
+
+    @PrePersist
+    private void prePersist(){
+
+        orderDate=new Date();
+    }
+
+
+
 }

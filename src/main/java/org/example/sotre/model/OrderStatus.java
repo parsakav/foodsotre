@@ -7,25 +7,16 @@ import java.util.List;
 @Entity
 @Table
 public class OrderStatus {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer statusID;
+
 
     @Column(unique = true, nullable = false,name = "status_name")
     @Enumerated(EnumType.STRING)
-
+@Id
     private Status status;
 
     @OneToMany(mappedBy = "status",fetch = FetchType.EAGER)
 private List<Order> orderList;
 
-    public Integer getStatusID() {
-        return statusID;
-    }
-
-    public void setStatusID(Integer statusID) {
-        this.statusID = statusID;
-    }
 
     public Status getStatus() {
         return status;

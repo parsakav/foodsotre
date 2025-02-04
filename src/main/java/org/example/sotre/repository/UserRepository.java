@@ -18,6 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 @RepositoryRestResource(collectionResourceRel = "users", path = "users")
 public interface UserRepository extends JpaRepository<User,Integer> {
 
+  @PreAuthorize("hasRole('ADMIN')")
+  @Transactional
+  @Query(value = "update user u where u.email=:email set u.verified=true ", nativeQuery = true)
+  @Modifying
+  User verifyUser(String email);
 
     User findUserByEmail(String email);
 

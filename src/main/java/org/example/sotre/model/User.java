@@ -23,7 +23,9 @@ public class User {
     private String address;
     private String city;
     private String postCode;
-    private String role; // Kunde/Admin
+    private String role;
+
+    private boolean verified = false;
 
     @OneToMany(mappedBy = "user",fetch = FetchType.EAGER)
     private List<Cart> carts;
@@ -134,5 +136,13 @@ public class User {
 role="ROLE_"+role;
 
         }
+    }
+
+    public boolean isVerified() {
+        return verified;
+    }
+
+    public void setVerified(boolean verified) {
+        this.verified = verified;
     }
 }

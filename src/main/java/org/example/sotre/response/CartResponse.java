@@ -8,6 +8,7 @@ import java.util.List;
 public class CartResponse {
     private int id;
     private double totalPrice;
+    private UserResponse userResponse;
     private List<ProductResponse> productResponseList;
 
     public double getTotalPrice() {
@@ -34,12 +35,19 @@ public class CartResponse {
         this.productResponseList = productResponseList;
     }
 
+    public UserResponse getUserResponse() {
+        return userResponse;
+    }
+    public void setUserResponse(UserResponse userResponse) {
+        this.userResponse = userResponse;
+    }
     public static CartResponse from(Cart cart) {
         CartResponse response = new CartResponse();
         response.setId(cart.getCartID());
         response.setTotalPrice(cart.getTotalPrice());
         response.setProductResponseList(ProductResponse.from(cart.getCartProducts()));
 
+        response.setUserResponse(new UserResponse(cart.getUser().getUserID(),cart.getUser().getEmail()));
   return response;
     }    public static List<CartResponse> from(List<Cart> cart) {
 
