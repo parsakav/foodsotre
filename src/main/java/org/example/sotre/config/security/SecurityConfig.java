@@ -47,7 +47,7 @@ public class SecurityConfig {
 		configuration.setAllowedMethods(Arrays.asList("*"));
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/", configuration);
+		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
 	@Bean
@@ -55,14 +55,12 @@ public class SecurityConfig {
 									AuthenticationManager authenticationManager, @Qualifier("source") CorsConfigurationSource source, UserDetailsService userDetailsService) throws Exception {
 		http.cors(e->{
 			e.configurationSource(source);
-		});
-		http.authenticationProvider(authProvider);
-http.csrf(AbstractHttpConfigurer::disable);
-
-http.sessionManagement(e->{
+		})
+				.authenticationProvider(authProvider)
+				.csrf(AbstractHttpConfigurer::disable).
+				sessionManagement(e->{
 	e.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-});
-		http.authorizeHttpRequests(e->{
+	}).authorizeHttpRequests(e->{
 			e.requestMatchers(
 
 					SecurityConstant.SIGN_UP_URL,"/swagger.html"
@@ -83,9 +81,7 @@ http.sessionManagement(e->{
 			e.anyRequest().permitAll();
 
 
-				});
-
-				http.addFilter(getAuthenticationFilter(authenticationManager))
+				}).addFilter(getAuthenticationFilter(authenticationManager))
 				.addFilter(new AuthorizationFilter(authenticationManager));
 
 		return http.build();

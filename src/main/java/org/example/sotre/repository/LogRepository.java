@@ -8,7 +8,7 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.security.access.prepost.PreAuthorize;
 
 @PreAuthorize("hasRole('ADMIN')")
-@RepositoryRestResource(collectionResourceRel = "log",path = "log")
+@RepositoryRestResource(collectionResourceRel = "logs",path = "logs")
 public interface LogRepository extends JpaRepository<Log,Integer> {
 
 }
