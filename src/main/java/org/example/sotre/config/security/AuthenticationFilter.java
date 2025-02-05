@@ -1,6 +1,7 @@
 package org.example.sotre.config.security;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
@@ -62,7 +63,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 			UserDto user=userService.getUserByUsername(username);
 			response.addHeader(SecurityConstant.HEADER_STRING, SecurityConstant.TOKEN_PREFIX+token);
 			response.addHeader("UserId", user.getEmail());
+			response.setContentType("application/json");
+			PrintWriter pw=new PrintWriter(response.getOutputStream(),true);
+			pw.println(String.format("""
+					{"token":"%s",
+					"email":"%s"
+					}
+					""",SecurityConstant.TOKEN_PREFIX+token,user.getEmail()));
 
+			pw.flush();
+			pw.close();
 	}
 
 
