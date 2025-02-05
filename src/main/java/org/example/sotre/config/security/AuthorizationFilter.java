@@ -9,6 +9,7 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.example.sotre.config.SpringApplicationContext;
 import org.example.sotre.service.UserService;
+import org.example.sotre.service.exceptions.UnverifiedUserException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Lazy;
@@ -66,17 +67,24 @@ private UserService userService;
 						.parseClaimsJws(header.replace("Bearer", "").trim()).getBody().getExpiration();
 				String username = Jwts.parserBuilder().setSigningKey(SecurityConstant.getSigningKey()).build()
 						.parseClaimsJws(header.replace("Bearer", "").trim()).getBody().getSubject();
-				if(new Date().after(d)){
+				if (new Date().after(d)) {
 
 					throw new IllegalStateException("The token has expired");
 				}
 				System.out.println(username);
-				// TODO Auto-generated method stub
-				UserDetails user=userService.loadUserByUsername(username);
-			if (username != null) {
+				// TODO Auto-generated method stub'
+				UserDetails user =null;
+				try{
+				 user = userService.loadUserByUsername(username);
+
+			} catch (UnverifiedUserException e){
+	System.out.println(e.getMessage());
+			}
+				if (username != null && user!=null) {
 
 					return new UsernamePasswordAuthenticationToken(user.getUsername(), null, user.getAuthorities());
 				}
+
 			}
 
 
