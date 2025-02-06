@@ -25,6 +25,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("from Product p where p.description like %:description%")
     List<Product> searchProductByDescription(@Param("description") String description);
-
+    
 }
 

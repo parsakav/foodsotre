@@ -23,7 +23,7 @@ public class Product {
     @JoinTable(name = "product_category")
     private List<Category> category;
 
-    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER,orphanRemoval = true,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
     private List<CartProduct> cartProducts;
 
 
