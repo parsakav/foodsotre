@@ -65,11 +65,14 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 			response.addHeader("UserId", user.getEmail());
 			response.setContentType("application/json");
 			PrintWriter pw=new PrintWriter(response.getOutputStream(),true);
+
 			pw.println(String.format("""
 					{"token":"%s",
-					"email":"%s"
+					"email":"%s",
+					"userId":"%s",
+					"role":"%s"
 					}
-					""",SecurityConstant.TOKEN_PREFIX+token,user.getEmail()));
+					""",SecurityConstant.TOKEN_PREFIX+token,user.getEmail(),user.getId(),user.getRole()));
 
 			pw.flush();
 			pw.close();

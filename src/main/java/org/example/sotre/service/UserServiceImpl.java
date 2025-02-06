@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
       org.example.sotre.model.User u=  userRepository.findUserByEmail(username);
       UserDto userDto = new UserDto();
         BeanUtils.copyProperties(u,userDto);
+        userDto.setId(u.getUserID());
         return userDto;
     }
 

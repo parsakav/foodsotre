@@ -1,21 +1,24 @@
 package org.example.sotre.model;
 
 import jakarta.persistence.*;
+import org.example.sotre.model.convertor.StatusConverter;
 
 import java.util.List;
 
 @Entity
 @Table
+
 public class OrderStatus {
 
 
     @Column(unique = true, nullable = false,name = "status_name")
     @Enumerated(EnumType.STRING)
-@Id
+    @Id
+    @Convert(converter = StatusConverter.class)
     private Status status;
 
     @OneToMany(mappedBy = "status",fetch = FetchType.EAGER)
-private List<Order> orderList;
+    private List<Order> orderList;
 
 
     public Status getStatus() {

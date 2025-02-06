@@ -35,10 +35,13 @@ public class SecurityConfig {
 		return authConfig.getAuthenticationManager();
 	}
 
+
+
 	@Bean(name = "passwordEncoder")
 	PasswordEncoder encoder() {
 		return new BCryptPasswordEncoder();
 	}
+
 
 	@Bean(name = "source")
 	CorsConfigurationSource corsConfigurationSource() {
@@ -50,6 +53,8 @@ public class SecurityConfig {
 		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
+
+
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http, AuthenticationProvider authProvider,
 									AuthenticationManager authenticationManager, @Qualifier("source") CorsConfigurationSource source, UserDetailsService userDetailsService) throws Exception {
