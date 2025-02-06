@@ -17,7 +17,9 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product, Integer> {
 
 
+/*
     @PreAuthorize("hasRole('USER')")
+*/
 
     @Query("from Product p where p.name like %:title%")
     List<Product> searchProductByTitle(@Param("title") String title);
@@ -25,6 +27,6 @@ public interface ProductRepository extends JpaRepository<Product, Integer> {
 
     @Query("from Product p where p.description like %:description%")
     List<Product> searchProductByDescription(@Param("description") String description);
-    
+
 }
 
