@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,7 +15,7 @@ public class UserController {
 
     @Autowired
     @Lazy
-   private BCryptPasswordEncoder bCryptPasswordEncoder;
+   private PasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private UserRepository userRepository;
 

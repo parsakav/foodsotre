@@ -24,16 +24,24 @@ public class UserRepositoryListener {
     @HandleBeforeDelete
     @PreAuthorize("hasRole('ADMIN')")
 
-    public void handleBeforeDelete(User product) {
+    public void handleBeforeDelete(User user) {
 
     }
     @HandleBeforeSave
     @PreAuthorize("hasAnyRole('USER','ADMIN')")
+    public void handleBeforeUpdate(User user) {
 
-    public void handleBeforeUpdate(User product) {
-        product.setPassword(encoder.encode(product.getPassword()));
-        System.out.println("Setting Password: " + product.getPassword());
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            if (!user.getPassword().startsWith("$2a$")) {
+              //  user.setPassword(encoder.encode(user.getPassword()));
+                System.out.println("Setting Password: " + user.getPassword());
+            } else {
+                System.out.println("Password is already encoded.");
+            }
+        }
     }
+
+
 
 
 }

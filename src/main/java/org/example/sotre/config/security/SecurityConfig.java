@@ -20,6 +20,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.firewall.HttpFirewall;
+import org.springframework.security.web.firewall.StrictHttpFirewall;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -51,10 +53,16 @@ public class SecurityConfig {
 		configuration.setAllowedHeaders(Arrays.asList("*"));
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", configuration);
+
 		return source;
 	}
 
-
+	@Bean
+	public HttpFirewall allowDoubleSlashHttpFirewall() {
+		StrictHttpFirewall firewall = new StrictHttpFirewall();
+		firewall.setAllowUrlEncodedDoubleSlash(true); // 👈 اجازه استفاده از "//" در URL
+		return firewall;
+	}
 	@Bean
 	SecurityFilterChain filterChain(HttpSecurity http, AuthenticationProvider authProvider,
 									AuthenticationManager authenticationManager, @Qualifier("source") CorsConfigurationSource source, UserDetailsService userDetailsService) throws Exception {

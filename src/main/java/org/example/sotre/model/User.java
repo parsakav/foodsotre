@@ -3,6 +3,7 @@ package org.example.sotre.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import org.example.sotre.config.SpringApplicationContext;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -15,14 +16,29 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Integer userID;
 
+    @NotBlank
     private String name;
     @Column(unique=true)
+    @NotBlank
+
     private String email;
+    @NotBlank
+
     private String password;
+    @NotBlank
+
     private String phoneNumber;
+    @NotBlank
+
     private String address;
+    @NotBlank
+
     private String city;
+    @NotBlank
+
     private String postCode;
+    @NotBlank
+
     private String role;
 
     private boolean verified = false;
@@ -128,12 +144,22 @@ public class User {
     public void encodePassword() {
         System.out.println(password);
         if (password != null) {
+
             BCryptPasswordEncoder passwordEncoder = (BCryptPasswordEncoder) SpringApplicationContext.getBean("passwordEncoder");
+            if (getPassword() != null && !getPassword().isBlank()) {
+                if (!getPassword().startsWith("$2a$")) {
+                    this.password = passwordEncoder.encode(this.password);
+                    System.out.println("Setting Password: " + getPassword());
+                } else {
+                    System.out.println("Password is already hashed");
+                }
+            }
+        }
+        if (role != null) {
 
-            this.password = passwordEncoder.encode(this.password);
-        }     if (role != null) {
-
-role="ROLE_"+role;
+            if (!role.isBlank() && !role.contains("ROLE_")) {
+                role = "ROLE_" + role;
+            }
 
         }
     }

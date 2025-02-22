@@ -2,6 +2,8 @@ package org.example.sotre.model;
 
 import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.util.List;
 @Entity
@@ -10,13 +12,19 @@ import java.util.List;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonProperty("id")  // این خط باعث نمایش id در خروجی JSON می‌شود
+    @JsonProperty("id")
 
     private Integer productID;
 
+    @Column(nullable = false)
+    @NotBlank
     private String name;
     private String description;
+    @Column(nullable = false)
+@NotNull
     private Double price;
+    @Column(nullable = false)
+
     private Integer stock;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
