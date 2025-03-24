@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
+import java.util.Base64;
 import java.util.List;
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -26,6 +27,9 @@ public class Product {
     @Column(nullable = false)
 
     private Integer stock;
+    @Lob
+    @Column(name = "image", columnDefinition = "LONGBLOB")
+    private byte[] image;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH}, fetch = FetchType.EAGER)
     @JoinTable(name = "product_category")
@@ -35,7 +39,32 @@ public class Product {
     private List<CartProduct> cartProducts;
 
 
+    @Transient
+    private String imageBase64;
 
+
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
+    public void setImageBase64(String base64) {
+        this.imageBase64 = base64;
+        if (base64 != null) {
+            this.image = Base64.getDecoder().decode(base64);
+        }
+    }
+
+    public String getImageBase64() {
+        if (this.image != null) {
+            return Base64.getEncoder().encodeToString(this.image);
+        }
+        return null;
+    }
     public Integer getProductID() {
         return productID;
     }
